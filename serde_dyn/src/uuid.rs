@@ -9,7 +9,8 @@ macro_rules! uuid {
     ($($type:ty => $id:expr),*) => {
         $(
             impl TypeUuid for $type {
-                const UUID: u128 = $id;
+                fn uuid_static() -> u128 { $id }
+                fn uuid(&self) -> u128 { $id }
             }
         )*
     }

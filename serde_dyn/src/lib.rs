@@ -7,7 +7,8 @@ use std::any::Any;
 use std::collections::HashMap;
 
 pub trait TypeUuid {
-    const UUID: u128;
+    fn uuid_static() -> u128 where Self: Sized;
+    fn uuid(&self) -> u128;
 }
 
 pub trait DeserializeDyn: DeserializeOwned + Any {
@@ -49,7 +50,7 @@ where
     }
 
     pub fn register<T: DeserializeDyn + TypeUuid>(&mut self) {
-        self.mapping.insert(T::UUID, T::deserialize_dyn);
+        self.mapping.insert(T::uuid_static(), T::deserialize_dyn);
     }
 
     pub fn deserialize_with_uuid(
